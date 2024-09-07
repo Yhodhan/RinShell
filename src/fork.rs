@@ -1,4 +1,4 @@
-pub enurk {
+pub enum Fork {
     Parent,
     Child,
 }
