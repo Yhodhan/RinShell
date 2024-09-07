@@ -5,7 +5,7 @@ use std::ptr;
 
 fn exec(cmd: Vec<String>) {
     unsafe {
-        let args_cstrings = cmd
+        let args_cstrings = &cmd
             .into_iter()
             .map(|arg| CString::new(arg))
             .collect::<Result<Vec<_>, _>>()
@@ -39,8 +39,6 @@ pub fn shell() -> Result<(), String> {
             .into_iter()
             .map(|arg| arg.to_string())
             .collect::<Vec<_>>();
-
-        println!("cmd is: {:?}", cmd);
 
         let pid = fork()?;
         // exec command
