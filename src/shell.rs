@@ -1,4 +1,5 @@
 use crate::fork::{fork, Fork};
+use libc::wait;
 use std::ffi::CString;
 use std::io::{self, Write};
 use std::ptr;
@@ -31,7 +32,7 @@ pub fn shell() -> Result<(), String> {
             .or(cmd.strip_suffix("\n"))
             .ok_or("could not strip")?;
 
-        if cmd == "exit" || cmd == "quit" {
+        if cmd == "exit" || cmd == "quit" || cmd == "q" {
             break;
         }
         let cmd = cmd
@@ -41,6 +42,11 @@ pub fn shell() -> Result<(), String> {
             .collect::<Vec<_>>();
 
         let pid = fork()?;
+
+        unsafe {
+            wait(core::ptr::null_mut());
+        }
+
         // exec command
         match pid {
             Fork::Child => exec(cmd),
