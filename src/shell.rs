@@ -12,7 +12,11 @@ fn exec(cmd: Vec<String>) {
             .collect::<Result<Vec<_>, _>>()
             .unwrap();
 
-        let mut args: Vec<_> = args_cstrings.into_iter().map(|arg| arg.as_ptr()).collect();
+        let mut args = args_cstrings
+            .into_iter()
+            .map(|arg| arg.as_ptr())
+            .collect::<Vec<_>>();
+
         args.push(ptr::null());
 
         libc::execvp(args[0], args.as_ptr());
